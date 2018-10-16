@@ -1,0 +1,59 @@
+[v-cloak] { display: none }
+
+
+header.pushed, main.pushed, footer.pushed {
+    padding-left: 300px !important;
+}
+
+main > .row {
+    margin: 12px 0;
+}
+
+.nav-wrapper.pushed {
+    padding-left: 300px !important;
+}
+.nav-wrapper .brand-logo {
+    margin-left: 32px;
+}
+
+.divider {
+    margin: 4px 0 !important;
+}
+
+.opac0 {
+    opacity: 0;
+}
+
+.brand-logo {
+	padding-left: 1em !important;
+}
+
+.parallax-container {
+      height: 300px !important;
+    }
+
+.responsive-table td{
+	padding: 0 !important;
+	font-size: 1.5em !important;
+
+}
+
+.responsive-table th{
+	font-size: 1.5em !important;
+}
+
+
+
+
+/* medium and down screens */
+@media only screen and (max-width : 992px) {
+    header, main, footer {
+        padding-left: 0 !important;
+    }
+    .nav-wrapper {
+        padding-left: 0px !important;
+    }
+    .nav-wrapper .brand-logo {
+        margin-left: 64px;
+    }
+}

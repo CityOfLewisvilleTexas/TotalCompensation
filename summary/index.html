@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- info -->
+    <title>Total Compensation Summary</title>
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- IE fix -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="http://metrics.cityoflewisville.com/assets/pmartin_dark.png" />
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- JQuery -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Product+Sans:400,400i,700,700i" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- custom css -->
+    <link rel="stylesheet" src="style.css">
+    <style>
+    @media print {
+        .no-print, .no-print * {
+            display: none
+        }
+    }
+    </style>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/js/materialize.min.js"></script> -->
+    <!-- axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
+    <!-- IE fix -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <!-- momentjs -->
+    <!-- <script type="text/javascript" src="./moment/moment.js"></script> -->
+</head>
+
+<body class="grey lighten-2">
+    <div id="app" v-cloak>
+        <div class="navbar-fixed no-print">
+            <nav class="nav-extended deep-purple z-depth-0">
+                <div class="nav-wrapper">
+                    <div class="container">
+                        <a href="#!" class="brand-logo">&nbsp;</a>
+                    </div>
+                </div>
+                <div class="nav-content" style="height: 300px">
+                    <span class="nav-title">&nbsp;</span>
+                </div>
+            </nav>
+        </div>
+        <ul class="section table-of-contents show-on-large" style="display: none" v-if="false">
+            <li class="valign-wrapper" v-for="section in sections" :key="'link-to-' + section.key" data-position="right" :data-tooltip="section.title">
+                <a :href="'#' + section.key" class="white-text">
+                    <i class="material-icons left">{{ section.icon }}</i> <span class="xl-only">{{ section.title }}</span>
+                </a>
+            </li>
+        </ul>
+        <div class="container">
+            <div class="row main">
+                <div class="col s12">
+                    <div class="row white-text">
+                        <div class="col s12 l10 offset-l1 left-align valign-wrapper">
+                            <div class="logo"></div>
+                            <h4 class="strip white-text">City of Lewisville</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 l10 offset-l1 section scrollspy" v-for="section in sections" :id="section.key" :key="section.key" class="section.class">
+                    <div class="white content card" v-if="!section.img">
+                        <table class="card-table">
+                            <tr class="adjusted">
+                                <td style="vertical-align: top;">
+                                    <div class="icon-holder">
+                                        <i class="material-icons icon left">{{ section.icon }}</i>
+                                    </div>
+                                </td>
+                                <td class="adjusted" style="vertical-align: top;">
+                                    <div class="content-holder">
+                                        <p class="title">{{ section.title }}</p>
+                                        <p class="body" v-html="section.text">{{ section.text }}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="white content card" v-else>
+                        <div class="card-image" v-if="section.img">
+                            <img :src="section.img">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title"><i class="material-icons left">{{ section.icon }}</i>{{ section.title }}</span>
+                            <p v-html="section.text"></p>
+                        </div>
+
+                        <!-- <table class="card-table">
+                            <tr class="adjusted">
+                                <td style="vertical-align: top;">
+                                    <div class="icon-holder">
+                                        <i class="material-icons icon left">{{ section.icon }}</i>
+                                    </div>
+                                </td>
+                                <td class="adjusted" style="vertical-align: top;">
+                                    <div class="content-holder">
+                                        <p class="title">{{ section.title }}</p>
+                                        <p class="body" v-html="section.text">{{ section.text }}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="spacer" v-for="i in 40">
+                <br>
+            </div> -->
+        </div>
+    </div>
+    <!-- source code -->
+    <script type="text/javascript" src="app.js"></script>
+</body>

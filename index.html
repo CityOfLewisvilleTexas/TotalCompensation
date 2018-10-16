@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Total Compensation</title>
+    <!-- force no compatibility mode in IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Product+Sans:400,400i,700,700i" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- styles -->
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <!-- <link rel="stylesheet" title="styles" href="materialize100/css/materialize.min.css"> --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- google charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- materialize -->
+    <!-- <script src="materialize100/js/materialize.js"></script> -->  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <!-- city oauth -->
+    <script src="http://eservices.cityoflewisville.com/COLSecurity/col_security.js"></script>
+    <!-- mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="white">
+    <div id="app">
+        <div class="navbar-fixed">
+            <nav>
+                <div class="nav-wrapper deep-purple">
+					<a class="brand-logo">City of Lewisville Total Compensation	</a>	
+					
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li><a href="http://apps.cityoflewisville.com/totalcompensation/summary/">Review Benefit Summary</a></li>
+					</ul>
+					
+				</div>
+            </nav>
+        </div>
+        <main>
+            <div class="progress" v-if="isLoading">
+                <div class="indeterminate"></div>
+            </div>
+            <!-- simple welcome message -->
+            <div class="row" v-if="colEmail && employeeData.FirstName">
+                <div style="font-size:1.5em" class="col s12 l10 offset-l1 grey-text text-darken-3">
+                    Welcome, <span class="bold">{{employeeData.FirstName}} {{employeeData.LastName}}</span>!
+                </div>
+            </div>
+            <div class="row">
+                <div class="parallax-container">
+                    <div class="parallax"><img src="images/City.jpg"></div>
+                </div>
+                <div class="section white" v-if="colEmail && employeeData.FirstName">
+                    <div class="row container">
+                        <h4>Total Compensation Statement</h4>
+                        <div class="col s6">
+                    		From: <input id="from-date" type="text" class="datepicker" placeholder="Date..." v-model="fromDate" />
+                    	</div>
+                    	<div class="col s6">
+                    		To: <input id="to-date" type="text" class="datepicker" placeholder="Date..." v-model="toDate" />
+                    	</div>
+                        <div class="col s12 m6">
+                            <table class="responsive-table">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Name:</b></td>
+                                        <td> {{employeeData.FirstName}} {{employeeData.LastName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Position:</b></td>
+                                        <td>{{employeeData.Position}} </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Department:</b></td>
+                                        <td>{{employeeData.DeptDesc}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col s12 m6">
+                            <table class="responsive-table">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Pay Rate <small>(as of {{ prettyDate(new Date()) }})</small>:</b></td>
+                                        <td>${{employeeData.PayRate}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Hire Date:</b></td>
+                                        <td>{{employeeData.HireDate}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Next Review Date:</b></td>
+                                        <td>{{employeeData.ReviewDate}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row container">
+                        <!-- SALARY TABLE  -->
+                        <div class="col s12">
+                            <table class="responsive-table highlight">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">
+                                            <h5>SALARY</h5> </th>
+                                    </tr>
+                                    <tr>
+                                        <th>Hours Type</th>
+                                        <th style="text-align:right;">Hours Worked</th>
+                                        <th style="text-align:right;">City Costs</th>
+                                        <th style="text-align:right;">Employee Costs</th>
+                                    </tr>
+                                    <thead>
+                                        <tbody>
+                                            <tr v-for="x in compData" v-if="x.Type==='HOURS'">
+                                                <td>{{x.CodeDescription}}</td>
+                                                <td style="text-align:right;">{{format(x.HoursWorked)}}</td>
+                                                <td style="text-align:right;">${{format(x.Amt)}} </td>
+                                                <td style="text-align:right;">$0.00</td>
+                                            </tr>
+                                            <tr class="deep-purple white-text">
+                                                <td colspan="2" style="text-align:right; font-size:1.25em;">Total Salary:</td>
+                                                <td style="text-align:right; font-size:1.25em;">${{format(hoursTotal)}}</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        <!-- BENEFITS TABLE  -->
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4">
+                                                    <h5>BENEFITS</h5> </th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2">Type</th>
+                                                <th style="text-align:right;">City Costs</th>
+                                                <th style="text-align:right;">Employee Costs</th>
+                                            </tr>
+                                            <thead>
+                                                <tbody>
+                                                    <tr v-for="x in compData" v-if="x.Type==='BENEFIT'">
+                                                        <td colspan="2">{{x.CodeDescription}}</td>
+                                                        <td style="text-align:right;">${{format(x.Amt)}} </td>
+                                                        <td style="text-align:right;">$0.00</td>
+                                                    </tr>
+                                                    <tr class="deep-purple white-text">
+                                                        <td colspan="2" style="text-align:right; font-size:1.25em;">Total Benefits:</td>
+                                                        <td style="text-align:right; font-size:1.25em;">${{format(benefitsTotal)}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                                <!-- DEDUCTIONS TABLE  -->
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="4">
+                                                            <h5>DEDUCTIONS</h5> </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="2">Type</th>
+                                                        <th style="text-align:right;">City Costs</th>
+                                                        <th style="text-align:right;">Employee Costs</th>
+                                                    </tr>
+                                                    <thead>
+                                                        <tbody>
+                                                            <tr v-for="x in compData" v-if="x.Type==='DEDUCTION'">
+                                                                <td colspan="2">{{x.CodeDescription}}</td>
+                                                                <td style="text-align:right;">$0.00</td>
+                                                                <td style="text-align:right;">${{format(x.Amt)}} </td>
+                                                            </tr>
+                                                            <tr class="deep-purple white-text">
+                                                                <td colspan="2" style="text-align:right; font-size:1.25em;">Total Deductions:</td>
+                                                                <td colspan="2" style="text-align:right; font-size:1.25em;">${{format(deductionsTotal)}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <!-- TAX TABLE  -->
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="4">
+                                                                    <h5>TAX</h5> </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="2">Type</th>
+                                                                <th style="text-align:right;">City Costs</th>
+                                                                <th style="text-align:right;">Employee Costs</th>
+                                                            </tr>
+                                                            <thead>
+                                                                <tbody>
+                                                                    <tr v-for="x in compData" v-if="x.Type==='TAX'">
+                                                                        <td colspan="2">{{x.CodeDescription}}</td>
+                                                                        <td style="text-align:right;" v-if="x.CodeDescription==='Medicare'">${{format(x.Amt)}}</td>
+                                                                        <td style="text-align:right;" v-else>$0.00</td>
+                                                                        <td style="text-align:right;">${{format(x.Amt)}} </td>
+                                                                    </tr>
+                                                                    <tr class="deep-purple white-text">
+                                                                        <td colspan="2" style="text-align:right; font-size:1.25em;">Total Tax:</td>
+                                                                        <td style="text-align:right; font-size:1.25em;">${{format(taxTotalMedicare)}}</td>
+                                                                        <td style="text-align:right; font-size:1.25em;">${{format(taxTotal)}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                            </table>
+                            <br>
+                            <table>
+                                <!-- TOTALS TABLE  -->
+                                <tbody style="border: 1px solid black; border-radius: 15px;">
+                                    <tr>
+                                        <th colspan="4">
+                                            <h5>YOUR TOTAL COMPENSATION: </h5> </th>
+                                        <td>City Contribution </td> <!-- (${{format(cityTtl)}}) +   PER MELINDA 10/16/2018 - NOT including employee deductions-->
+                                        <!--<td> Employee Contribution (${{format(empTtl)}}) = </td> -->
+                                        <td class="deep-purple white-text" style="text-align:right"><span style="font-size:2em;">${{format(ttlComp)}}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row container">
+                        <!-- Pie Chart : Percentage City vs Employee -->
+                        <div>
+                            <div id="piePortion" style="overflow: hidden"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="parallax-container">
+                    <div class="parallax"><img src="images/City.jpg"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- source code -->
+    <script type="text/javascript" src="./moment/moment.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>

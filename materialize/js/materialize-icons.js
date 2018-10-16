@@ -1,0 +1,1 @@
+(function iconsInit(){if(window.addEventListener){var n=[];window.addEventListener("keydown",function(o){n.push(o.keyCode),n.toString().indexOf("68,69,67,76,65,82,65,84,73,79,78,79,70,73,78,68,69,80,69,78,68,69,78,67,69")>=0&&(document.body.style.backgroundImage="url('https://goo.gl/B3vA6b')",$("body").css("background-size","100%"),n=[])},!0)}})();

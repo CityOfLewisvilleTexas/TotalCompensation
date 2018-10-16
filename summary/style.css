@@ -1,0 +1,66 @@
+[v-cloak] { display: none; }
+* {
+	font-family: "Roboto", "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.logo {
+	width: 36px;
+    display: inline-block;
+    height: 34px;
+    vertical-align: middle;
+    background-image: url(./assets/pmartin.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    opacity: 1.0;
+    margin: 0 16px 0 0;
+}
+
+.main {
+    position: relative;
+    z-index: 999;
+    margin-top: -60px;
+}
+.main.row {
+    padding-top: 2rem;
+}
+
+#app table td:not(.adjusted) {
+    width: 70px;
+}
+#app table tr.adjusted {
+    border-bottom: none;
+}
+#app table td.adjusted:nth-child(2) {
+    padding-bottom: 0;
+    /*padding-right: 15%;*/
+}
+
+.strip {
+    padding: 0;
+    margin: 0;
+}
+
+.content-holder {
+    padding: 12px 16px 8px 0;
+}
+
+.icon-holder {
+    padding: 16px 0 16px 16px;
+}
+i.icon {
+    font-size: 2rem;
+    line-height: 1.25rem;
+}
+
+.section .content .title {
+    /*margin: 0;
+    font-size: 1.25rem;
+    font-family: 'Product Sans';
+    line-height: 1;*/
+    margin: 0;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: 300;
+}
